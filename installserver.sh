@@ -223,7 +223,7 @@
                                     "autoUpgradeMinorVersion": true,
                                     "settings": {
                                         "fileUris": [
-                                            "https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/201-vmss-bottle-autoscale/installserver.sh",
+                                            "https://raw.githubusercontent.com/charlesdexterdavid/cloudassignment3/master/installserver.sh",
                                             "https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/201-vmss-bottle-autoscale/workserver.py"
                                         ],
                                         "commandToExecute": "bash installserver.sh"

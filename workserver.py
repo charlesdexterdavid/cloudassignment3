@@ -2,9 +2,7 @@ import math
 import socket
 import threading
 import time
-import requests
-from bottle import route, run, template
-
+from bottle import route, run
 hostname = socket.gethostname()
 hostport = 9000
 keepworking = False  
@@ -21,7 +19,7 @@ def workerthread():
     while (True):
         while (keepworking == True):
             msg = bus_service.receive_queue_message('taskqueue', peek_lock=True)
-            print msg 
+            # print msg 
         time.sleep(3)
 
 
@@ -30,8 +28,8 @@ worker_thread = threading.Thread(target=workerthread, args=())
 worker_thread.start()
 
 
-index_html = '''My first web app! By <strong>{{ author }}</strong>.'''
-testoutput_html = '''<h2>Val{{ trans }}</h2>.'''
+# index_html = '''My first web app! By <strong>{{ author }}</strong>.'''
+# testoutput_html = '''<h2>Val{{ trans }}</h2>.'''
 
 
 

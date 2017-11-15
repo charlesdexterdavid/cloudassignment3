@@ -6,7 +6,7 @@ import requests
 from bottle import route, run, template
 
 hostname = socket.gethostname()
-hostport = 9000
+hostport = 80
 keepworking = False  
 
 

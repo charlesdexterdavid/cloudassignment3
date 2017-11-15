@@ -3,7 +3,7 @@ import socket
 import threading
 import time
 
-from bottle import route, run, template
+from bottle import route, run
 
 hostname = socket.gethostname()
 hostport = 9000
@@ -12,33 +12,16 @@ keepworking = False
 
 
 def workerthread():
-    from azure.servicebus import ServiceBusService, Message, Queue
-    bus_service = ServiceBusService(
-    service_namespace='cloudassignment34ed0', 
-    shared_access_key_name='RootManageSharedAccessKey',
-    shared_access_key_value='P6TUMCQVFg8ZIG8Z5KiPAIFaAHzvTcX9g7n8fNYAbZ0=')
-    
     while (True):
         while (keepworking == True):
-            msg = bus_service.receive_queue_message('taskqueue', peek_lock=True)
-            print msg 
+            for x in range(1, 69):
+                y = math.factorial(x)
         time.sleep(3)
 
 
 # start the worker thread
 worker_thread = threading.Thread(target=workerthread, args=())
 worker_thread.start()
-
-
-index_html = '''My first web app! By <strong>{{ author }}</strong>.'''
-
-
-@route('/real')
-def index():
-    return template(index_html, author='Real Python')
-
-
-
 
 
 def writebody():

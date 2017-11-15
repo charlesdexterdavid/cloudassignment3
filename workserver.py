@@ -58,9 +58,9 @@ def root():
     return writebody()
 
 
-@route('/test')
-def testoutput():
-    return template(testoutput_html, trans='we will see')
+# @route('/test')
+# def testoutput():
+#     return template(testoutput_html, trans='we will see')
 
 
 

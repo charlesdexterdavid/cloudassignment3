@@ -2,7 +2,9 @@ import math
 import socket
 import threading
 import time
+import requests
 from bottle import route, run
+from azure.servicebus import ServiceBusService, Message, Queue
 hostname = socket.gethostname()
 hostport = 9000
 keepworking = False  
@@ -10,7 +12,7 @@ keepworking = False
 
 
 def workerthread():
-    from azure.servicebus import ServiceBusService, Message, Queue
+    
     bus_service = ServiceBusService(
     service_namespace='cloudassignment34ed0', 
     shared_access_key_name='RootManageSharedAccessKey',
@@ -18,8 +20,10 @@ def workerthread():
     
     while (True):
         while (keepworking == True):
-            msg = bus_service.receive_queue_message('taskqueue', peek_lock=True)
+            # msg = bus_service.receive_queue_message('taskqueue', peek_lock=True)
             # print msg 
+            for x in range(1, 69):
+                y = math.factorial(x)
         time.sleep(3)
 
 
@@ -28,18 +32,13 @@ worker_thread = threading.Thread(target=workerthread, args=())
 worker_thread.start()
 
 
-# index_html = '''My first web app! By <strong>{{ author }}</strong>.'''
-# testoutput_html = '''<h2>Val{{ trans }}</h2>.'''
-
-
-
 
 
 
 
 def writebody():
     body = '<html><head><title>Work interface - build</title></head>'
-    body += '<body><h2>David Dexter Charles Worker interface on ' + hostname + '</h2><ul><h3>'
+    body += '<body><h2>David Charles Worker interface on ' + hostname + '</h2><ul><h3>'
 
     if keepworking == False:
         body += '<br/>Worker thread is not running. <a href="./do_work">Start work</a><br/>'
@@ -54,12 +53,6 @@ def writebody():
 @route('/')
 def root():
     return writebody()
-
-
-# @route('/test')
-# def testoutput():
-#     return template(testoutput_html, trans='we will see')
-
 
 
 @route('/do_work')

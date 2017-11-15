@@ -5,7 +5,7 @@ bus_service = ServiceBusService(
     shared_access_key_value='P6TUMCQVFg8ZIG8Z5KiPAIFaAHzvTcX9g7n8fNYAbZ0=')
 
 bus_service.create_queue('taskqueue')
-msg = Message('Test Message')
+msg = Message('Test for today Message')
 bus_service.send_queue_message('taskqueue', msg)
 
 # bus_service_r = ServiceBusService(

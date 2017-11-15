@@ -2,6 +2,37 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
   "contentVersion": "1.0.0.0",
   "parameters": {
+      "serviceBusQueueName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the Queue"
+            }
+        },
+     "serviceBusNamespaceName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the Service Bus namespace"
+            }
+        },
+        "serviceBusSku": {
+            "type": "string",
+            "allowedValues": [
+                "Basic",
+                "Standard",
+                "Premium"
+            ],
+            "defaultValue": "Standard",
+            "metadata": {
+                "description": "The messaging tier for service Bus namespace"
+            }
+        },
+        "serviceBusApiVersion": {
+            "type": "string",
+            "defaultValue": "2015-08-01",
+            "metadata": {
+                "description": "Service Bus ApiVersion used by the template"
+            }
+        },
     "vmSku": {
       "type": "string",
       "defaultValue": "Standard_A1",
@@ -38,6 +69,29 @@
   },
   "variables": {
     "location": "[resourceGroup().location]",
+    "sbVersion": "[parameters('serviceBusApiVersion')]",
+    "defaultSASKeyName": "RootManageSharedAccessKey",
+    "defaultAuthRuleResourceId": "[resourceId('Microsoft.ServiceBus/namespaces/authorizationRules', parameters('serviceBusNamespaceName'), variables('defaultSASKeyName'))]",
+    "authRuleResourceId": "[resourceId('Microsoft.ServiceBus/namespaces/authorizationRules', parameters('serviceBusNamespaceName'), variables('defaultSASKeyName'))]",
+    "storageAccountType": "Standard_LRS",
+    "saCount": 5,
+    "newStorageAccountSuffix": "[concat(parameters('vmssName'), 'sa')]",
+    "uniqueStringArray": [
+      "[concat(uniqueString(concat(resourceGroup().id, variables('newStorageAccountSuffix'), '0')))]",
+      "[concat(uniqueString(concat(resourceGroup().id, variables('newStorageAccountSuffix'), '1')))]",
+      "[concat(uniqueString(concat(resourceGroup().id, variables('newStorageAccountSuffix'), '2')))]",
+      "[concat(uniqueString(concat(resourceGroup().id, variables('newStorageAccountSuffix'), '3')))]",
+      "[concat(uniqueString(concat(resourceGroup().id, variables('newStorageAccountSuffix'), '4')))]"
+    ],
+    "vhdContainerName": "[concat(parameters('vmssName'), 'vhd')]",
+    "vhdContainerArray": [
+      "[concat('https://', variables('uniqueStringArray')[0], variables('newStorageAccountSuffix'), '.blob.core.windows.net/', variables('vhdContainerName'))]",
+      "[concat('https://', variables('uniqueStringArray')[1], variables('newStorageAccountSuffix'), '.blob.core.windows.net/', variables('vhdContainerName'))]",
+      "[concat('https://', variables('uniqueStringArray')[2], variables('newStorageAccountSuffix'), '.blob.core.windows.net/', variables('vhdContainerName'))]",
+      "[concat('https://', variables('uniqueStringArray')[3], variables('newStorageAccountSuffix'), '.blob.core.windows.net/', variables('vhdContainerName'))]",
+      "[concat('https://', variables('uniqueStringArray')[4], variables('newStorageAccountSuffix'), '.blob.core.windows.net/', variables('vhdContainerName'))]"
+    ],
+    "osDiskName": "[concat(parameters('vmssName'), 'osdisk')]",
     "addressPrefix": "10.0.0.0/16",
     "subnetPrefix": "10.0.0.0/24",
     "virtualNetworkName": "[concat(parameters('vmssName'), 'vnet')]",
@@ -57,20 +111,42 @@
     "osType": {
       "publisher": "Canonical",
       "offer": "UbuntuServer",
-      "sku": "16.04-LTS",
+      "sku": "16.04.0-LTS",
       "version": "latest"
     },
     "imageReference": "[variables('osType')]",
-    "computeApiVersion": "2017-03-30",
+     "computeApiVersion": "2017-03-30",
     "networkApiVersion": "2017-04-01",
+    "storageApiVersion": "2016-01-01",
     "insightsApiVersion": "2015-04-01"
   },
   "resources": [
     {
+        "apiVersion": "[variables('sbVersion')]",
+        "name": "[parameters('serviceBusNamespaceName')]",
+        "type": "Microsoft.ServiceBus/namespaces",
+        "location": "[variables('location')]",
+        "sku": {
+            "name": "Standard",
+            "tier": "Standard"
+        },
+        "resources": [{
+            "apiVersion": "[variables('sbVersion')]",
+            "name": "[parameters('serviceBusQueueName')]",
+            "type": "Queues",
+            "dependsOn": [
+                "[concat('Microsoft.ServiceBus/namespaces/', parameters('serviceBusNamespaceName'))]"
+            ],
+            "properties": {
+                "path": "[parameters('serviceBusQueueName')]"
+            }
+        }]
+    },
+    {
       "type": "Microsoft.Network/virtualNetworks",
       "name": "[variables('virtualNetworkName')]",
       "location": "[variables('location')]",
-      "apiVersion": "2017-04-01",
+      "apiVersion": "[variables('networkApiVersion')]",
       "properties": {
         "addressSpace": {
           "addressPrefixes": [
@@ -88,10 +164,25 @@
       }
     },
     {
+      "type": "Microsoft.Storage/storageAccounts",
+      "name": "[concat(variables('uniqueStringArray')[copyIndex()], variables('newStorageAccountSuffix'))]",
+      "location": "[variables('location')]",
+      "apiVersion": "[variables('storageApiVersion')]",
+      "copy": {
+        "name": "storageLoop",
+        "count": "[variables('saCount')]"
+      },
+      "properties": {},
+      "kind": "Storage",
+      "sku": {
+        "name": "[variables('storageAccountType')]"
+      }
+    },
+    {
       "type": "Microsoft.Network/publicIPAddresses",
       "name": "[variables('publicIPAddressName')]",
       "location": "[variables('location')]",
-      "apiVersion": "2017-04-01",
+      "apiVersion": "[variables('networkApiVersion')]",
       "properties": {
         "publicIPAllocationMethod": "Dynamic",
         "dnsSettings": {
@@ -103,7 +194,7 @@
       "type": "Microsoft.Network/loadBalancers",
       "name": "[variables('loadBalancerName')]",
       "location": "[variables('location')]",
-      "apiVersion": "2017-04-01",
+      "apiVersion": "[variables('networkApiVersion')]",
       "dependsOn": [
         "[concat('Microsoft.Network/publicIPAddresses/', variables('publicIPAddressName'))]"
       ],
@@ -143,9 +234,9 @@
                 "id": "[variables('frontEndIPConfigID')]"
               },
               "protocol": "tcp",
-              "frontendPortRangeStart": "9000",
-              "frontendPortRangeEnd": "9120",
-              "backendPort": "9000"
+              "frontendPortRangeStart": 9000,
+              "frontendPortRangeEnd": 9120,
+              "backendPort": 9000
             }
           }
         ]
@@ -155,8 +246,9 @@
       "type": "Microsoft.Compute/virtualMachineScaleSets",
       "name": "[parameters('vmssName')]",
       "location": "[variables('location')]",
-      "apiVersion": "2017-03-30",
+      "apiVersion": "[variables('computeApiVersion')]",
       "dependsOn": [
+        "storageLoop",
         "[concat('Microsoft.Network/loadBalancers/', variables('loadBalancerName'))]",
         "[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
       ],
@@ -173,8 +265,10 @@
         "virtualMachineProfile": {
           "storageProfile": {
             "osDisk": {
-              "createOption": "FromImage",
-              "caching": "ReadWrite"
+              "vhdContainers": "[take(variables('vhdContainerArray'), variables('saCount'))]",
+              "name": "[variables('osDiskName')]",
+              "caching": "ReadOnly",
+              "createOption": "FromImage"
             },
             "imageReference": "[variables('imageReference')]"
           },
@@ -241,7 +335,7 @@
     },
     {
       "type": "Microsoft.Insights/autoscaleSettings",
-      "apiVersion": "2015-04-01",
+      "apiVersion": "[variables('insightsApiVersion')]",
       "name": "autoscalehost",
       "location": "[variables('location')]",
       "dependsOn": [
@@ -261,16 +355,16 @@
             },
             "rules": [
               {
-                "metricTrigger": {
-                  "metricName": "Percentage CPU",
+                 "metricTrigger": {
+                  "metricName": "MessageCount",
                   "metricNamespace": "",
-                  "metricResourceUri": "[concat('/subscriptions/',subscription().subscriptionId, '/resourceGroups/',  resourceGroup().name, '/providers/Microsoft.Compute/virtualMachineScaleSets/', parameters('vmSSName'))]",
+                  "metricResourceUri": "/subscriptions/d494b561-b40d-4b16-a8d1-d4a6bdcf54b2/resourceGroups/STORAGE_FOR_ALL2/providers/Microsoft.ServiceBus/namespaces/cloudassignment34ed0/queues/taskqueue",
                   "timeGrain": "PT1M",
                   "statistic": "Average",
                   "timeWindow": "PT5M",
                   "timeAggregation": "Average",
                   "operator": "GreaterThan",
-                  "threshold": 60
+                  "threshold": 10.0
                 },
                 "scaleAction": {
                   "direction": "Increase",
@@ -281,15 +375,15 @@
               },
               {
                 "metricTrigger": {
-                  "metricName": "Percentage CPU",
+                  "metricName": "MessageCount",
                   "metricNamespace": "",
-                  "metricResourceUri": "[concat('/subscriptions/',subscription().subscriptionId, '/resourceGroups/',  resourceGroup().name, '/providers/Microsoft.Compute/virtualMachineScaleSets/', parameters('vmSSName'))]",
+                  "metricResourceUri": "/subscriptions/d494b561-b40d-4b16-a8d1-d4a6bdcf54b2/resourceGroups/STORAGE_FOR_ALL2/providers/Microsoft.ServiceBus/namespaces/cloudassignment34ed0/queues/taskqueue",
                   "timeGrain": "PT1M",
                   "statistic": "Average",
                   "timeWindow": "PT5M",
                   "timeAggregation": "Average",
                   "operator": "LessThan",
-                  "threshold": 30
+                  "threshold": 5.0
                 },
                 "scaleAction": {
                   "direction": "Decrease",
@@ -303,5 +397,15 @@
         ]
       }
     }
-  ]
+  ],
+    "outputs": {
+      "NamespaceConnectionString": {
+          "type": "string",
+          "value": "[listkeys(variables('authRuleResourceId'), variables('sbVersion')).primaryConnectionString]"
+      },
+      "SharedAccessPolicyPrimaryKey": {
+          "type": "string",
+          "value": "[listkeys(variables('authRuleResourceId'), variables('sbVersion')).primaryKey]"
+      }
+  }
 }

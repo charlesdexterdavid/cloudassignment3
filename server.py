@@ -15,4 +15,3 @@ bus_service = ServiceBusService(
 
 msg = bus_service.receive_queue_message('taskqueue', peek_lock=True)
 print(msg.body)
- 

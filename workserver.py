@@ -2,7 +2,7 @@ import math
 import socket
 import threading
 import time
-
+import requests
 from bottle import route, run, template
 
 hostname = socket.gethostname()
@@ -31,11 +31,9 @@ worker_thread.start()
 
 
 index_html = '''My first web app! By <strong>{{ author }}</strong>.'''
+testoutput_html = '''<h2>Val{{ trans }}</h2>.'''
 
 
-@route('/real')
-def index():
-    return template(index_html, author='Real Python')
 
 
 
@@ -58,6 +56,12 @@ def writebody():
 @route('/')
 def root():
     return writebody()
+
+
+@route('/test')
+def testoutput():
+    return template(testoutput_html, trans='we will see')
+
 
 
 @route('/do_work')

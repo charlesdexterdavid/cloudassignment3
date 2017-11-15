@@ -7,7 +7,7 @@ cp workserver.py $workserver_path
 apt-get -y update
 apt-get -y install python3-bottle
 apt-get -y install python3-pip
-pip3 install azure-storage
+#pip3 install azure-storage
 # create a service
 touch /etc/systemd/system/workserver.service
 printf '[Unit]\nDescription=workServer Service\nAfter=rc-local.service\n' >> /etc/systemd/system/workserver.service

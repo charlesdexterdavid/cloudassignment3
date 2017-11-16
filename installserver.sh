@@ -4,11 +4,12 @@ mkdir $workserver_path
 cp workserver.py $workserver_path
 
 # install python3-bottle 
-apt-get -y update
-apt-get -y install python3-bottle
+apt -y update
+apt -y install python3-bottle
 apt -y install python3-pip
 pip3 install azure-storage
 pip3 install azure-servicebus
+
 # create a service
 touch /etc/systemd/system/workserver.service
 printf '[Unit]\nDescription=workServer Service\nAfter=rc-local.service\n' >> /etc/systemd/system/workserver.service

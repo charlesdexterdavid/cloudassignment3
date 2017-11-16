@@ -267,7 +267,7 @@
                                     "timeWindow": "PT5M",
                                     "timeAggregation": "Average",
                                     "operator": "GreaterThan",
-                                    "threshold": 100000
+                                    "threshold": 10
                                 },
                                 "scaleAction": {
                                     "direction": "Increase",
@@ -286,13 +286,51 @@
                                     "timeWindow": "PT5M",
                                     "timeAggregation": "Average",
                                     "operator": "LessThan",
-                                    "threshold": 50000
+                                    "threshold": 3
                                 },
                                 "scaleAction": {
                                     "direction": "Decrease",
                                     "type": "ChangeCount",
                                     "value": "1",
                                     "cooldown": "PT5M"
+                                }
+                            },
+                            {
+                                "metricTrigger": {
+                                    "metricName": "Percentage CPU",
+                                    "metricNamespace": "",
+                                    "metricResourceUri": "/subscriptions/d494b561-b40d-4b16-a8d1-d4a6bdcf54b2/resourceGroups/cloudassignment3/providers/Microsoft.Compute/virtualMachineScaleSets/notddc",
+                                    "timeGrain": "PT1M",
+                                    "statistic": "Average",
+                                    "timeWindow": "PT5M",
+                                    "timeAggregation": "Average",
+                                    "operator": "GreaterThan",
+                                    "threshold": 60
+                                },
+                                "scaleAction": {
+                                    "direction": "Increase",
+                                    "type": "ChangeCount",
+                                    "value": "1",
+                                    "cooldown": "PT1M"
+                                }
+                            },
+                            {
+                                "metricTrigger": {
+                                    "metricName": "Percentage CPU",
+                                    "metricNamespace": "",
+                                    "metricResourceUri": "/subscriptions/d494b561-b40d-4b16-a8d1-d4a6bdcf54b2/resourceGroups/cloudassignment3/providers/Microsoft.Compute/virtualMachineScaleSets/notddc",
+                                    "timeGrain": "PT1M",
+                                    "statistic": "Average",
+                                    "timeWindow": "PT5M",
+                                    "timeAggregation": "Average",
+                                    "operator": "LessThan",
+                                    "threshold": 30
+                                },
+                                "scaleAction": {
+                                    "direction": "Decrease",
+                                    "type": "ChangeCount",
+                                    "value": "1",
+                                    "cooldown": "PT1M"
                                 }
                             }
                         ]

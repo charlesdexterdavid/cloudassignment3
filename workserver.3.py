@@ -18,18 +18,18 @@ def workerthread():
     shared_access_key_name='RootManageSharedAccessKey',
     shared_access_key_value='P6TUMCQVFg8ZIG8Z5KiPAIFaAHzvTcX9g7n8fNYAbZ0=')
     
-    # while (True):
-    #     while (keepworking == True):
-    #         # msg = bus_service.receive_queue_message('taskqueue', peek_lock=True)
-    #         # print msg 
-    #         for x in range(1, 69):
-    #             y = math.factorial(x)
-    #     time.sleep(3)
+    while (True):
+        while (keepworking == True):
+            # msg = bus_service.receive_queue_message('taskqueue', peek_lock=True)
+            # print msg 
+            for x in range(1, 69):
+                y = math.factorial(x)
+        time.sleep(3)
 
 
 # start the worker thread
-# worker_thread = threading.Thread(target=workerthread, args=())
-# worker_thread.start()
+worker_thread = threading.Thread(target=workerthread, args=())
+worker_thread.start()
 
 
 
@@ -38,14 +38,14 @@ def workerthread():
 
 def writebody():
     body = '<html><head><title>Work interface - build</title></head>'
-    body += '<body><h2>Worker interface to start queue reader ' + hostname + '</h2><ul><h3>'
+    body += '<body><h2>David Charles Worker interface on ' + hostname + '</h2><ul><h3>'
 
     if keepworking == False:
-        body += '<br/>Queue Reader is not running. <a href="./do_work">Start work</a><br/>'
+        body += '<br/>Worker thread is not running. <a href="./do_work">Start work</a><br/>'
     else:
-        body += '<br/>Queue Reader is running. <a href="./stop_work">Stop work</a><br/>'
+        body += '<br/>Worker thread is running. <a href="./stop_work">Stop work</a><br/>'
 
-    body += '<br/>Usage:<br/><br/>/start = start queue reader<br/>/stop = stop queue reader<br/>'
+    body += '<br/>Usage:<br/><br/>/do_work = start worker thread<br/>/stop_work = stop worker thread<br/>'
     body += '</h3></ul></body></html>'
     return body
 
@@ -55,7 +55,7 @@ def root():
     return writebody()
 
 
-@route('/start')
+@route('/do_work')
 def do_work():
     global keepworking
     # start worker thread
@@ -63,7 +63,7 @@ def do_work():
     return writebody()
 
 
-@route('/stop')
+@route('/stop_work')
 def stop_work():
     global keepworking
     # stop worker thread

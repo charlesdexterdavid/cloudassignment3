@@ -7,7 +7,7 @@ from datetime import datetime
 async def fetch(url):
     async with ClientSession() as session:
         async with session.get(url) as response:
-            print(url)
+            # print(url)
             return await response.read()
 
 
@@ -30,7 +30,7 @@ async def run(loop,  r):
     responses = asyncio.gather(*tasks)
     await responses
 
-number = 10#9000
+number = 1000000
 loop = asyncio.get_event_loop()
 print(datetime.now().strftime('Start:%Y-%m-%d %H:%M:%S'))
 future = asyncio.ensure_future(run(loop, number))

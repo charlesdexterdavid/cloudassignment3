@@ -17,3 +17,4 @@ val=bus_service.get_queue('taskqueue').message_count #number of messages on the 
 print (val)
 msg = bus_service.receive_queue_message('taskqueue', peek_lock=True)
 print(msg.body)
+# queue_service.delete_queue('taskqueue')

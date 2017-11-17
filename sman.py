@@ -22,15 +22,15 @@ class StorageManager(object):
        bus_service.send_queue_message(qname, msg)
     
     def dequeue(self,qname):
-        return bus_service.receive_queue_message(qname, peek_lock=False)
+        return bus_service.receive_queue_message(qname, peek_lock=True).delete()
         
     def peek(self,qname):
         return bus_service.receive_queue_message(qname, peek_lock=True)
     
     def delete_all_messages(self,qname):
         # bus_service.clear_messages('taskqueue')
-        for i in range(0,self.getqsize(qname)):
-            self.dequeue(qname)
+        # for i in range(0,self.getqsize(qname)):
+        self.dequeue(qname)
     def add_dummy_data(self):
         # data = json.dumps(request.get_json())
         # d = json.loads(data)
@@ -51,11 +51,14 @@ class StorageManager(object):
         
 
 test = StorageManager()
-test.add_dummy_data()
+# test.add_dummy_data()
 print (test.getqsize('taskqueue'))
-print (test.peek('taskqueue').body)
-test.delete_all_messages('taskqueue')
-print (test.getqsize('taskqueue'))
+# print (test.peek('taskqueue').body)
+# test.delete_all_messages('taskqueue')
+# print ("apple1")
+# bus_service.receive_queue_message('taskqueue', peek_lock=True).delete()
+# print ("apple2")
+# print (test.getqsize('taskqueue'))
 
 
 # https://github.com/facebook/prophet/issues/140

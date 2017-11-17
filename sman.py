@@ -15,8 +15,8 @@ table_service.create_table('failstore')
 
 class StorageManager(object):
     
-    def getqsize(self,name):
-        bus_service.get_queue(name).message_count
+    def getqsize(self,qname):
+        return bus_service.get_queue(qname).message_count
     
     def enqueue(self,qname,msg):
        bus_service.send_queue_message(qname, msg)
@@ -27,24 +27,36 @@ class StorageManager(object):
     def peek(self,qname):
         return bus_service.receive_queue_message(qname, peek_lock=True)
     
+    def delete_all_messages(self,qname):
+        # bus_service.clear_messages('taskqueue')
+        for i in range(0,self.getqsize(qname)):
+            self.dequeue(qname)
     def add_dummy_data(self):
         # data = json.dumps(request.get_json())
         # d = json.loads(data)
         d={}
-        d['TransactionID']="1"
-        d['UserId']="A1"
-        d['SellerID']="S1"
-        d['Product_Name']="Financial Trap"
-        d['Transaction_Date']=str(datetime.datetime.utcnow())
-        d['PartitionKey']=d['UserId']
-        d['RowKey']=d['Transaction_Date']
-        transaction = d
-        table_service.insert_entity('failstore', transaction)
+        for i in range(0,10):
+            d['TransactionID']=str(i)
+            d['UserId']="A"+str(i)
+            d['SellerID']="S"+str(i)
+            d['Product_Name']="Financial Trap"+str(i)
+            d['Transaction_Date']=str(datetime.datetime.utcnow())
+            d['PartitionKey']=d['UserId']
+            d['RowKey']=d['Transaction_Date']
+            transaction = d
+            msg = Message(str(d))
+            bus_service.send_queue_message('taskqueue', msg)
+            # table_service.insert_entity('failstore', transaction)
         return json.dumps(d)
         
 
 test = StorageManager()
 test.add_dummy_data()
+print (test.getqsize('taskqueue'))
+print (test.peek('taskqueue').body)
+test.delete_all_messages('taskqueue')
+print (test.getqsize('taskqueue'))
+
 
 # https://github.com/facebook/prophet/issues/140
 # https://github.com/ansible/ansible/issues/31741

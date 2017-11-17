@@ -4,7 +4,7 @@ import threading
 import time
 import requests
 from bottle import route, run
-from azure.servicebus import ServiceBusService, Message, Queue
+# from azure.servicebus import ServiceBusService, Message, Queue
 hostname = socket.gethostname()
 hostport = 9000
 keepworking = False  
@@ -12,11 +12,11 @@ keepworking = False
 
 
 def workerthread():
-    
-    bus_service = ServiceBusService(
-    service_namespace='cloudassignment34ed0', 
-    shared_access_key_name='RootManageSharedAccessKey',
-    shared_access_key_value='P6TUMCQVFg8ZIG8Z5KiPAIFaAHzvTcX9g7n8fNYAbZ0=')
+    print ("This is a test")
+    # bus_service = ServiceBusService(
+    # service_namespace='cloudassignment34ed0', 
+    # shared_access_key_name='RootManageSharedAccessKey',
+    # shared_access_key_value='P6TUMCQVFg8ZIG8Z5KiPAIFaAHzvTcX9g7n8fNYAbZ0=')
     
     # while (True):
     #     while (keepworking == True):

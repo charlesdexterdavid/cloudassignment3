@@ -13,10 +13,11 @@ bus_service = ServiceBusService(
 #     shared_access_key_name='RootManageSharedAccessKey',
 #     shared_access_key_value='P6TUMCQVFg8ZIG8Z5KiPAIFaAHzvTcX9g7n8fNYAbZ0=')
 
-for i in range(0,bus_service.get_queue('taskqueue').message_count-1):
+# for i in range(0,bus_service.get_queue('taskqueue').message_count-1):
     # val=bus_service.get_queue('taskqueue').message_count #number of messages on the quque
     # print (val)
-    print (i)
-    msg = bus_service.receive_queue_message('taskqueue', peek_lock=True)
-    print(msg.body)
+print (bus_service)
+# print (i)
+msg = bus_service.receive_queue_message('taskqueue', peek_lock=True)
+print(msg.body)
 # queue_service.delete_queue('taskqueue')

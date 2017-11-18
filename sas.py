@@ -1,4 +1,4 @@
-from azure.storage import QueueService, AccessPolicy, SharedAccessPolicy, QueueSharedAccessPermissions
+from azure import QueueService, AccessPolicy, SharedAccessPolicy, QueueSharedAccessPermissions
 queue_service = QueueService(account_name, account_key)
 ap = AccessPolicy(
     expiry='2018-10-12',

@@ -9,6 +9,8 @@ apt -y install python3-bottle
 apt -y install python3-pip
 pip3 install azure-storage
 pip3 install azure-servicebus
+apt -y install default-jre
+apt -y install openjdk-8-jdk
 
 # create a service
 touch /etc/systemd/system/workserver.service

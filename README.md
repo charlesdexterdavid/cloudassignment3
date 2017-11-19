@@ -1,18 +1,48 @@
-### Autoscale demo app on Ubuntu 16.04 ###
+# Messsage Generator and Receive 0.0.1
 
-Simple self-contained Ubuntu autoscale example which includes a Python Bottle server to do work. The VM Scale Set scales up when average CPU across all VMs > 60%, scales down when avg CPU < 30%.
+## Synopsis: The application works in two parts: 
 
-- Deploy the scale set with an instance count of 1 
-- After it is deployed look at the resource group public IP address resource (in portal or resources explorer). Get the IP or domain name.
-- Browse to the website of vm#0 (port 9000), which shows the current backend VM name.
-- To start doing work on the first VM browse to dns:9000/do_work
-- After a few minutes the VM Scale Set capacity will increase. Note that the first scale out takes longer than subsequent ones whlie the autoscale pipeline gets initialized (i.e. wait up to half an hour before you concluding there's a problem).
-- You can stop doing work by browsing to dns:9000/stop_work.
+  1. A message genrator: the message generator will allow you to generate any amount of messages at a rate specified to be pushed to a specified queue on Azure Service Bus. limitations are due to the machine specifications.
+  
+  2. A message receiver: The receive will allow the retrieval and storages of messages from an Azure Service Bus queue at a rate specifed. Limitations are due to the machine specifications 
 
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fazure-quickstart-templates%2Fmaster%2F201-vmss-bottle-autoscale%2Fazuredeploy.json" target="_blank">
-    <img src="http://azuredeploy.net/deploybutton.png"/>
-</a>
-<a href="http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fazure-quickstart-templates%2Fmaster%2F201-vmss-bottle-autoscale%2Fazuredeploy.json" target="_blank">
-    <img src="http://armviz.io/visualizebutton.png"/>
-</a>
+## USING THE JAR FILE:
+
+#### Usage Syntax format for generating messages (using the MsgGenRecv.jar file): 
+
+``` java -jar MsgGenRecv.jar send_messages <queue_name> <message_count> <message_send_rate> [<verbose_switch>]```
+
+* <span style="color:orange;">queue_name</span> :  The name of the service bus queue. Please note that the queue will be created if it doesnt exist.
+
+* <span style="color:orange;">message_count</span> : A number which represents the amount of messages you will like to push to the queue.
+
+* <span style="color:orange;">message_send_rate</span> : A number which represents the rate at which messages will be sent per second.
+
+* <span style="color:orange;">-v</span> : An OPTONAL switch to enable the generator to be verbose when sending messages.
+
+#### Usage Syntax format for receiving messages (using the MsgGenRecv.jar file): 
+
+```java -jar MsgGenRecv.jar receive_messages <queue_name> <message_recv_rate> [<verbose_switch>]```
+
+* <span style="color:	#ADFF2F;">queue_name</span> : The name of the service bus queue.
+
+* <span style="color:	#ADFF2F;">message_recv_rate</span> : A number which represents the amount of messages that should be pulled concurrently from the queue.
+
+* <span style="color:	#ADFF2F"> -v</span> : An OPTONAL switch to enable the generator to be verbose when sending messages.
+
+
+## USING THE msg_gen_recv.sh script
+
+**IMPORTANT**:  <span style="color:			#FF0000"> Please note that the MsgGenRecv.jar file should be in the same directory as the as the msg_gen_recv.sh file;</span>
+
+### Usage Syntax format for generating messages (using the msg_gen_recv.sh file):
+```/bin/bash msg_gen_recv.sh send_messages <queue_name> <message_count> <message_send_rate> [<verbose_switch>]```
+
+### Usage Syntax format for generating messages (using the msg_gen_recv.sh file):
+``` /bin/bash msg_gen_recv.sh receive_messages <queue_name> <message_recv_rate> [<verbose_switch>]```
+
+
+
+
+
 

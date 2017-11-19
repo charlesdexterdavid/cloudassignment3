@@ -12,7 +12,7 @@
 
 ``` java -jar MsgGenRecv.jar send_messages <queue_name> <message_count> <message_send_rate> [<verbose_switch>]```
  
-***Example***: ```java -jar MsgGenRecv.jar send_messages taskqueue 100```
+***Example***: ```java -jar MsgGenRecv.jar send_messages taskqueue 1000000 4000```
 
 * <span style="color:orange;">queue_name</span> :  The name of the service bus queue. Please note that the queue will be created if it doesnt exist. e.g.: ```taskqueue```
 

@@ -2,9 +2,9 @@
 
 ## Synopsis: The application works in two parts: 
 
-  1. A message genrator: the message generator will allow you to generate any amount of messages at a rate specified to be pushed to a specified queue on Azure Service Bus. limitations are due to the machine specifications.
+  1. **A message genrator**: the message generator will allow you to generate any amount of messages at a rate specified to be pushed to a specified queue on Azure Service Bus. limitations are due to the machine specifications.
   
-  2. A message receiver: The receive will allow the retrieval and storages of messages from an Azure Service Bus queue at a rate specifed. Limitations are due to the machine specifications 
+  2. **A message receiver**: The receive will allow the retrieval and storages of messages from an Azure Service Bus queue at a rate specifed. Limitations are due to the machine specifications 
 
 ## USING THE JAR FILE:
 
@@ -12,11 +12,11 @@
 
 ``` java -jar MsgGenRecv.jar send_messages <queue_name> <message_count> <message_send_rate> [<verbose_switch>]```
 
-* <span style="color:orange;">queue_name</span> :  The name of the service bus queue. Please note that the queue will be created if it doesnt exist.
+* <span style="color:orange;">queue_name</span> :  The name of the service bus queue. Please note that the queue will be created if it doesnt exist. e.g.: ```taskqueue```
 
-* <span style="color:orange;">message_count</span> : A number which represents the amount of messages you will like to push to the queue.
+* <span style="color:orange;">message_count</span> : A number which represents the amount of messages you will like to push to the queue. e.g.: ```1000000```
 
-* <span style="color:orange;">message_send_rate</span> : A number which represents the rate at which messages will be sent per second.
+* <span style="color:orange;">message_send_rate</span> : A number which represents the rate at which messages will be sent per second. e.g.:```4000```
 
 * <span style="color:orange;">-v</span> : An OPTONAL switch to enable the generator to be verbose when sending messages.
 
@@ -26,7 +26,7 @@
 
 * <span style="color:	#ADFF2F;">queue_name</span> : The name of the service bus queue.
 
-* <span style="color:	#ADFF2F;">message_recv_rate</span> : A number which represents the amount of messages that should be pulled concurrently from the queue.
+* <span style="color:	#ADFF2F;">message_recv_rate</span> : A number which represents the amount of messages that should be pulled concurrently from the queue. e.g: ```4000```
 
 * <span style="color:	#ADFF2F"> -v</span> : An OPTONAL switch to enable the generator to be verbose when sending messages.
 

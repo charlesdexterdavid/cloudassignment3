@@ -267,7 +267,7 @@
                                     "timeWindow": "PT5M",
                                     "timeAggregation": "Average",
                                     "operator": "GreaterThan",
-                                    "threshold": 100000
+                                    "threshold": 50000
                                 },
                                 "scaleAction": {
                                     "direction": "Increase",

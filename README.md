@@ -26,11 +26,11 @@
 
 ```java -jar MsgGenRecv.jar receive_messages <queue_name> <message_recv_rate> [<verbose_switch>]```
 
-***Example***: ```java -jar MsgGenRecv.jar receive_messages taskqueue 2000```
+***Example***: ```java -jar MsgGenRecv.jar receive_messages taskqueue 250```
 
 * <span style="color:	#ADFF2F;">queue_name</span> : The name of the service bus queue.
 
-* <span style="color:	#ADFF2F;">message_recv_rate</span> : A number which represents the amount of messages that should be pulled concurrently from the queue. e.g: ```1000```
+* <span style="color:	#ADFF2F;">message_recv_rate</span> : A number which represents the amount of messages that should be pulled concurrently from the queue. e.g: ```250```
 
 * <span style="color:	#ADFF2F"> -v</span> : An OPTONAL switch to enable the generator to be verbose when sending messages.
 

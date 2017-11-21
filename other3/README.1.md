@@ -8,7 +8,7 @@
 
 ## USING THE JAR FILE:
 
-### Usage Syntax format for generating messages (using the MsgGenRecv.jar file): 
+#### Usage Syntax format for generating messages (using the MsgGenRecv.jar file): 
 
 ``` java -jar MsgGenRecv.jar send_messages <queue_name> <message_count> <message_send_rate> [<verbose_switch>]```
  
@@ -22,17 +22,31 @@
 
 * <span style="color:orange;">-v</span> : An OPTONAL switch to enable the generator to be verbose when sending messages.
 
-### Usage Syntax format for receiving messages (using the MsgGenRecv.jar file): 
-
-##### Note: below configuaration in the example is what is being used when the jar file is deployed due to the settings in the arm template (azuredeploy.json)
+#### Usage Syntax format for receiving messages (using the MsgGenRecv.jar file): 
 
 ```java -jar MsgGenRecv.jar receive_messages <queue_name> <message_recv_rate> [<verbose_switch>]```
 
-***Example***: ```java -jar MsgGenRecv.jar receive_messages taskqueue 400```
+***Example***: ```java -jar MsgGenRecv.jar receive_messages taskqueue 250```
 
 * <span style="color:	#ADFF2F;">queue_name</span> : The name of the service bus queue.
 
-* <span style="color:	#ADFF2F;">message_recv_rate</span> : A number which represents the amount of messages that should be pulled concurrently from the queue. e.g: ```400```
+* <span style="color:	#ADFF2F;">message_recv_rate</span> : A number which represents the amount of messages that should be pulled concurrently from the queue. e.g: ```250```
 
-* <span style="color:	#ADFF2F"> -v</span> : An OPTONAL switch to enable the generator to be verbose when sending messages i.e. pints each incoming message read from queue.
+* <span style="color:	#ADFF2F"> -v</span> : An OPTONAL switch to enable the generator to be verbose when sending messages.
+
+
+## USING THE msg_gen_recv.sh script
+
+**IMPORTANT**:  <span style="color:			#FF0000"> Please note that the MsgGenRecv.jar file should be in the same directory as the msg_gen_recv.sh file;</span>
+
+### Usage Syntax format for generating messages (using the msg_gen_recv.sh file):
+```/bin/bash msg_gen_recv.sh send_messages <queue_name> <message_count> <message_send_rate> [<verbose_switch>]```
+
+### Usage Syntax format for generating messages (using the msg_gen_recv.sh file):
+``` /bin/bash msg_gen_recv.sh receive_messages <queue_name> <message_recv_rate> [<verbose_switch>]```
+
+
+
+
+
 

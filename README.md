@@ -1,5 +1,11 @@
 # Messsage Generator and Receive 0.0.1
 
+## Quick Access Link:
+
+* [folder containing the java files](https://github.com/charlesdexterdavid/cloudassignment3/tree/master/Code%20For%20MsgGenRecv/src/main/java/com/ptasdevz)
+
+
+
 ## Synopsis: The application works in two parts: 
 
   1. **A message genrator**: the message generator will allow you to generate any amount of messages at a rate specified to be pushed to a specified queue on Azure Service Bus. limitations are due to the machine specifications.

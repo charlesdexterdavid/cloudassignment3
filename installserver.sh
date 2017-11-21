@@ -1,11 +1,9 @@
 #!/bin/bash
 workserver_path=/srv/workserver
 mkdir $workserver_path
-# cp workserver.py $workserver_path
-
 cp MsgGenRecv.jar $workserver_path
 
-# install python3-bottle 
+# install required jdks
 apt -y update
 apt -y install default-jre
 apt -y install openjdk-8-jdk

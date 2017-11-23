@@ -18,13 +18,13 @@
 
 ``` java -jar MsgGenRecv.jar send_messages <queue_name> <message_count> <message_send_rate> [<verbose_switch>]```
  
-***Example***: ```java -jar MsgGenRecv.jar send_messages taskqueue 1000000 2000```
+***Example***: ```java -jar MsgGenRecv.jar send_messages taskqueue 1000000 1000```
 
 * <span style="color:orange;">queue_name</span> :  The name of the service bus queue. Please note that the queue will be created if it doesnt exist. e.g.: ```taskqueue```
 
 * <span style="color:orange;">message_count</span> : A number which represents the amount of messages you will like to push to the queue. e.g.: ```1000000```
 
-* <span style="color:orange;">message_send_rate</span> : A number which represents the rate at which messages will be sent per second. e.g.:```2000```
+* <span style="color:orange;">message_send_rate</span> : A number which represents the rate at which messages will be sent per second. e.g.:```1000```
 
 * <span style="color:orange;">-v</span> : An OPTONAL switch to enable the generator to be verbose when sending messages.
 

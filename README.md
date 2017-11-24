@@ -24,7 +24,7 @@
 
 * <span style="color:orange;">message_count</span> : A number which represents the amount of messages you will like to push to the queue. e.g.: ```1000000```
 
-* <span style="color:orange;">message_send_rate</span> : A number which represents the rate at which messages will be sent per second. e.g.:```1000```
+* <span style="color:orange;">message_send_rate</span> : A number of concurrent request sent by the generator. e.g.:```1000```
 
 * <span style="color:orange;">-v</span> : An OPTONAL switch to enable the generator to be verbose when sending messages.
 
